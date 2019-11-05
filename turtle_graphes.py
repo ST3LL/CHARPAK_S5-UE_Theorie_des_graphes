@@ -20,17 +20,40 @@ def sommet(c,x,y):
 
 
 
+def arc(x,y,z,t,p):
+    if (p == 0):
+        setheading(0)
+        up()
+        setpos(z,t+30)
+        left(90)
+        down()
+        circle(sqrt((x-z)*(x-z)+(y-t)*(y-t))/2, 180)
+    else:
+        setheading(0)
+        up()
+        setpos(z, t + 30)
+        left(-90)
+        down()
+        circle(sqrt((x - z) * (x - z) + (y - t) * (y - t)) / 2, 180)
+
+
+
 def arcp(x,y,z,t,p):
-    setheading(0)
+    if (x < z):
+        p = 0
+        arc(x,y,z,t,p)
+        up()
+        setpos(x + sqrt((x - z) * (x - z) + (y - t) * (y - t)) / 2, y + sqrt((x - z) * (x - z) + (y - t) * (y - t)) / 2)
+    else:
+        p = 1
+        arc(x, y, z, t, p)
+        up()
+        setpos(z + sqrt((x - z) * (x - z) + (y - t) * (y - t)) / 2, y - sqrt((x - z) * (x - z) + (y - t) * (y - t)) / 2)
     up()
-    setpos(z,t+30)
-    left(90)
     down()
-    circle(sqrt((x-z)*(x-z)+(y-t)*(y-t))/2, 180)
-    up()
-    setpos((x+z)/2,y+sqrt((x-z)*(x-z)+(y-t)*(y-t))/2+40)
     write(p, False, align="center", font=("Ariel",10,"normal"))
     up()
+    setpos(0,0)
 
 
 def graph(M):
