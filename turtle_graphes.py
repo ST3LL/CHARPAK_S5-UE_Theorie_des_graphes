@@ -9,6 +9,7 @@ from turtle import *
 from math import *
 
 
+
 def sommet(c,x,y):
     up()
     setpos(x,y)
@@ -56,6 +57,31 @@ def arcp(x,y,z,t,p):
     setpos(0,0)
 
 
+def matprod(a,b):
+    n = len(a)
+    c = zero((n,n))
+    for i in range(n):
+        for j in range(n):
+            s = 0
+            for k in range(n):
+                if (s != 1):
+                    s = a[i][k] * b[k][j]
+            c[i][j] = s
+    return c
+
+
+def chemin(M):
+    n = len(M)
+    A = zero((n,n))
+    B = zero((n,n))
+    p = log(n,2)
+    A = M
+    for i in range(p):
+        B = matprod(A,A)
+        A = B
+    return A
+
+
 def graph(M):
     for i in range (len(M)):
         sommet(i,i*100,50)
@@ -73,7 +99,8 @@ Matrice M :
 """
 
 clearscreen()
-graph([[0,1,7],[1,0,4],[7,4,0]])
+M = [[0,1,7],[1,0,4],[7,4,0]]
+chemin(M)
 exitonclick()
 
 """
