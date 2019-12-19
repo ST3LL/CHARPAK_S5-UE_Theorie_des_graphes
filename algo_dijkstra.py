@@ -14,7 +14,7 @@ def Init(d, sdeb):
         d[i] = np.Infinity
     d[sdeb] = 0
     
-def chercher(d, s):
+def chercher(d, s): 
     mini = np.Infinity
     sommet = -1
     n = len(d)
@@ -44,12 +44,26 @@ def djk(M, deb):
     n = len(M)
     d = np.zeros(n)
     s = np.zeros(n)
+    ch = np.zeros(n)
     Init(d,deb)
     while(fin(s) == 0):
         i = chercher(d, s)
         s[i] = 1
         maj(i, d, s, M)
+    af(ch, M, 0, sdeb)
     return d
+
+
+def af(ch, M, i, sdeb):
+    k = i  
+    j = k
+    while k != sdeb:
+        print(k, end='',flush=True)
+        k = int(ch[k])
+        print('--(',M[j][k],')-->', end='', flush=True)
+        j = k
+    print(sdeb)
+
 
 M = (
      (0,-3,0,3,0),
