@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jan  2 16:19:39 2020
-
 @authors: Estelle Fiket & Inès Thao
-"""
 
-"""
+
 But : 
     Vecteur tp : planning au plus vite
     Vecteur ts : Planning séqueniel
@@ -85,7 +82,7 @@ def graph(M):
 def detec_cycle(M):
     """
     On compare les voisins de chaque sommet.
-    M = [[0,1,0,0,0,1],[0,0,1,0,0,1],[0,0,0,1,0,0],[0,0,0,0,1,0],[0,1,0,0,0,0],[0,0,0,0,0,0]]
+    M = ((0,1,0,0,0,1),(0,0,1,0,0,1),(0,0,0,1,0,0),(0,0,0,0,1,0),(0,1,0,0,0,0),(0,0,0,0,0,0))
 
     |1|  2 |  3 |  4 |  5 |  6 |      file = []
     |0|None|None|None|None|None|      file = [1]
@@ -97,16 +94,14 @@ def detec_cycle(M):
       --> 4>1 donc cycle
 
     Entrée : tuples
-
     Sortie : str
         
     Tests :
-    >>>detec_cycle([0,1,0],[0,0,1],[0,0,0])
-    Graphe Acyclique
-    >>>detec_cycle([[0,1,0,0,0,1],[0,0,1,0,0,1],[0,0,0,1,0,0],[0,0,0,0,1,0],[0,1,0,0,0,0],[0,0,0,0,0,0]])
+    >>>detec_cycle((0,1,0),(0,0,1),(1,0,0)
     Graphe Cyclique
+    >>>detec_cycle(((0,1,0,0,0,1),(0,0,1,0,0,1),(0,0,0,1,0,0),(0,0,0,0,1,0),(0,1,0,0,0,0),(0,0,0,0,0,0)))
+    Graphe Acyclique
     """
-    
     file = []
     element = [None for i in range(len(M))]
     file.append(0)
@@ -135,21 +130,19 @@ def voisins(sommet, graph):
 def same_vect(v1, v2): 
     """
     Vérifie si deux vecteurs sont identiques.
-    v1 = [0,1,0,0,0,1]
-    v2 = [0,0,0,0,0,0]
+    v1 = (0,1,0,0,0,1)
+    v2 = (0,0,0,0,0,0)
     
-    Entrée : 2 lists
-    
+    Entrée : 2 tuples
     Sortie : bool
     
     Tests :
-    >>>v1 = [0,1,0,0,0,1]
-    >>>v2 = [0,0,0,0,0,0]
+    >>>v1 = (0,1,0,0,0,1)
+    >>>v2 = (0,0,0,0,0,0)
     >>>same_vect(v1, v2)
     False
-    
-    >>>v1 = [0,1,0,0,0,1]
-    >>>v2 = [0,1,0,0,0,1]
+    >>>v1 = (0,1,0,0,0,1)
+    >>>v2 = (0,1,0,0,0,1)
     >>>same_vect(v1, v2)
     True
     """
@@ -163,10 +156,8 @@ def same_vect(v1, v2):
 def tp_ts(M):
     """
     Renvoie un vecteur ts (planning séquentiel) et un vecteur tp (planning au plus vite) à partir d'une matrice d'adjacence M.
-    M = [[0,1,0,0,0,1],[0,0,1,0,0,1],[0,0,0,1,0,0],[0,0,0,0,1,0],[0,1,0,0,0,0],[0,0,0,0,0,0]]
     
     Entrée : tuple
-    
     Sortie : 2 lists
     
     Tests : 
@@ -179,23 +170,25 @@ def tp_ts(M):
     ts = []
     M = np.array(M)
     nul = []
-    for n in range(l): #Vecteur nul de la taille de la matrice
-        nul.append(0)
- 
-    while len(ts) != l :
-        tmp = []
-        for j in range(l) :  
-            if j not in ts and same_vect(M[:,j], nul) :
-                tmp.append(j)
-        
-        tp.append(tmp)
-        for e in tmp :
-            ts.append(e)
-        
-        for j in tmp :
-            M[j,:]=nul
+    if (detec_cycle(M) == 'Graphe Acyclique'):
+        for n in range(l): #Vecteur nul de la taille de la matrice
+            nul.append(0)
+        while len(ts) != l :
+            tmp = []
+            for j in range(l) :  
+                if j not in ts and same_vect(M[:,j], nul) :
+                    tmp.append(j)
+            tp.append(tmp)
+            for e in tmp :
+                ts.append(e)
+            for j in tmp :
+                M[j,:]=nul
+        return(tp, ts)
+    else : 
+        return "Veuillez donner un graphe acyclique s'il vous plait!"
 
-    return(tp, ts)
+    
+
 
 
 def afficher(t):
@@ -206,12 +199,18 @@ def afficher(t):
             print(i, ":", e)
 
 
-M=((0,0,0,0,0),(1,0,0,0,0),(0,0,0,1,1),(1,1,0,0,0),(0,0,0,0,0))
 
-print(detec_cycle(M))
-tp, ts = tp_ts(M)
-print("\nPlanning au plus vite :")
-afficher(tp)
-print("\nPlanning séquentiel :")
-afficher(ts)
-graph(M)
+M = ((0,0,0,0,0),(1,0,0,0,0),(0,0,0,1,1),(1,1,0,0,0),(0,0,0,0,0))
+#M = ((0,1,0),(0,0,1),(1,0,0))
+
+if (detec_cycle(M) == 'Graphe Acyclique'):
+    print(detec_cycle(M))
+    tp, ts = tp_ts(M)
+    print("\nPlanning au plus vite :")
+    afficher(tp)
+    print("\nPlanning séquentiel :")
+    afficher(ts)
+    graph(M)
+else :
+    print(detec_cycle(M))
+    print(tp_ts(M))
